@@ -13,7 +13,7 @@ public:
 	void SetNumerator(int);
 	void SetDenominator(int);
 	int Numerator() const;
-	int Denimonator() const;
+	int Denominator() const;
 	Fraction sum(Fraction a, Fraction b);
 	//Fraction operator+(Fraction b);
 private:
@@ -23,8 +23,8 @@ private:
 Fraction sum(Fraction a, Fraction b)
 {
 	Fraction c;
-	c.SetNumerator(a.Numerator() * b.Denimonator() + a.Denimonator() * b.Numerator());
-	c.SetDenominator(a.Denimonator() * b.Denimonator());
+	c.SetNumerator(a.Numerator() * b.Denominator() + a.Denominator() * b.Numerator());
+	c.SetDenominator(a.Denominator() * b.Denominator());
 	return c;
 }
 
@@ -45,25 +45,24 @@ int main()
 	b.SetNumerator(nb);
 	b.SetDenominator(db);
 	c = sum(a, b);
-	cout << a.Numerator();
+	cout << c.Numerator() << "/" << c.Denominator();
 }
 
 void Fraction::SetNumerator(int Numerator)
 {
-	m_Numenator == Numerator;
+	m_Numenator = Numerator;
 }
 
 void Fraction::SetDenominator(int Denominator)
 {
-	m_Denominator == Denominator;
+	m_Denominator = Denominator;
 }
 
+int Fraction::Denominator() const
+{
+	return m_Denominator;
+}
 int Fraction::Numerator() const
 {
 	return m_Numenator;
-}
-
-int Fraction::Denimonator() const
-{
-	return m_Denominator;
 }
