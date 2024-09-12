@@ -1,5 +1,4 @@
 ﻿#include <iostream>
-#include "pch.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -24,7 +23,7 @@ private:
 Fraction sum(Fraction a, Fraction b)
 {
 	Fraction c;
-	c.SetNumerator(a.Numerator() * b.Denimonator() + a.Denimonator * b.Numerator);
+	c.SetNumerator(a.Numerator() * b.Denimonator() + a.Denimonator() * b.Numerator());
 	c.SetDenominator(a.Denimonator() * b.Denimonator());
 	return c;
 }
@@ -32,12 +31,18 @@ Fraction sum(Fraction a, Fraction b)
 int main()
 {
 	Fraction a, b;
-	cin >> a.SetNumerator;
-	puts();
-	cin >> a.SetDenominator;
-	puts();
-	cin >> b.SetNumerator;
-	puts();
-	cin >> b.SetDenominator;
-	cout << a;
+	int na, da, nb, db;
+	cin >> na;
+	cout << "Vvedite Numerator a";
+	cin >> da;
+	cout << "Vvedite Denominator a";
+	cin >> nb;
+	cout << "Vvedite Numerator b";
+	cin >> db;
+	cout << "Vvedite  Denominator b";
+	a.SetNumerator(na);
+	a.SetDenominator(da);
+	b.SetNumerator(nb);
+	b.SetDenominator(db);
+	return a;
 }
