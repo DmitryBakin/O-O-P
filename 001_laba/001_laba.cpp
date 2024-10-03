@@ -11,7 +11,7 @@ void swap(int& a, int& b)
 	a = b;
 	b = c;
 }
-struct Fraction
+class Fraction
 {
 public:
 	Fraction();
@@ -135,7 +135,7 @@ void Fraction::fractionReduction()
 		m_Numerator /= NOD;
 		m_Denominator /= NOD;
 	}
-	if (m_Numerator < 0 && m_Denominator < 0)
+	if (m_Denominator < 0)
 	{
 		m_Numerator *= -1;
 		m_Denominator *= -1;
@@ -210,7 +210,6 @@ int main()
 	a = a ^ degree;
 	cout << "a ^ " << degree << " = ";
 	a.outputFraction();
-
 	return 0;
 }
 Fraction::Fraction()
