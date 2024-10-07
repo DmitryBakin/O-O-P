@@ -66,14 +66,14 @@ Fraction Fraction::operator^(int n)
 	return b;
 
 }
-bool Fraction::denBigger(Fraction const b) 
+bool Fraction::denBigger(Fraction const b)
 {
 	return (m_Denominator > b.m_Denominator);
 }
 void Fraction::fractionReduction()
 {
 	int NOD = 0;
-	while (NOD!=1)
+	while (NOD != 1)
 	{
 		NOD = 1;
 		for (int i = 2; i <= std::min(abs(m_Numerator), abs(m_Denominator)); ++i)
@@ -92,7 +92,7 @@ void Fraction::inputFraction()
 {
 	std::cout << "Enter numerator fraction: ";
 	std::cin >> m_Numerator;
-	std::cout  << "Enter denominator fraction: ";
+	std::cout << "Enter denominator fraction: ";
 	std::cin >> m_Denominator;
 	if (m_Denominator == 0)
 	{
