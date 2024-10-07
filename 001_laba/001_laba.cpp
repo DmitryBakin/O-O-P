@@ -186,11 +186,11 @@ void Fraction::setDenominator(int Denominator)
 {
 	m_Denominator = Denominator;
 }
-int Fraction::Denominator() const
+int Fraction::denominator() const
 {
 	return m_Denominator;
 }
-int Fraction::Numerator() const
+int Fraction::numerator() const
 {
 	return m_Numerator;
 }
