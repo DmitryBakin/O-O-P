@@ -77,7 +77,7 @@ void Fraction::fractionReduction()
 	while (NOD!=1)
 	{
 		NOD = 1;
-		for (int i = 1; i <= std::min(abs(m_Numerator), abs(m_Denominator)); ++i)
+		for (int i = 2; i <= std::min(abs(m_Numerator), abs(m_Denominator)); ++i)
 			if (m_Numerator % i == 0 && m_Denominator % i == 0)
 				NOD = i;
 		m_Numerator /= NOD;
