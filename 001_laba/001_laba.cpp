@@ -88,6 +88,7 @@ void Fraction::fractionReduction()
 		m_Denominator *= -1;
 	}
 }
+
 void Fraction::inputFraction()
 {
 	std::cout << "Enter numerator fraction: ";
@@ -104,6 +105,40 @@ void Fraction::inputFraction()
 void Fraction::outputFraction()
 {
 	std::cout << m_Numerator << "/" << m_Denominator << std::endl;
+}
+Fraction::Fraction()
+{
+}
+Fraction::Fraction(int Numerator, int Denominator)
+{
+	if (Denominator == 0)
+	{
+		std::cout << "Denominator cannot be == 0" << std::endl;
+		m_Numerator = 0;
+		m_Denominator = 1;
+	}
+	else
+	{
+		m_Numerator = Numerator;
+		m_Denominator = Denominator;
+
+	}
+}
+void Fraction::setNumerator(int Numerator)
+{
+	m_Numerator = Numerator;
+}
+void Fraction::setDenominator(int Denominator)
+{
+	m_Denominator = Denominator;
+}
+int Fraction::Denominator() const
+{
+	return m_Denominator;
+}
+int Fraction::Numerator() const
+{
+	return m_Numerator;
 }
 int main()
 {
@@ -158,38 +193,4 @@ int main()
 	std::cout << "a ^ " << degree << " = ";
 	deg.outputFraction();
 	return 0;
-}
-Fraction::Fraction()
-{
-}
-Fraction::Fraction(int Numerator, int Denominator)
-{
-	if (Denominator == 0)
-	{
-		std::cout << "Denominator cannot be == 0" << std::endl;
-		m_Numerator = 0;
-		m_Denominator = 1;
-	}
-	else 
-	{
-		m_Numerator = Numerator;
-		m_Denominator = Denominator;
-
-	}
-}
-void Fraction::setNumerator(int Numerator)
-{
-	m_Numerator = Numerator;
-}
-void Fraction::setDenominator(int Denominator)
-{
-	m_Denominator = Denominator;
-}
-int Fraction::Denominator() const
-{
-	return m_Denominator;
-}
-int Fraction::Numerator() const
-{
-	return m_Numerator;
 }
