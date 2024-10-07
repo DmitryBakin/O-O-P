@@ -73,14 +73,13 @@ bool Fraction::denBigger(Fraction const b)
 }
 void Fraction::fractionReduction()
 {
-	while (true)
+	int NOD = 0;
+	while (NOD!=1)
 	{
-		int NOD = 1;
+		NOD = 1;
 		for (int i = 1; i <= std::min(abs(m_Numerator), abs(m_Denominator)); ++i)
 			if (m_Numerator % i == 0 && m_Denominator % i == 0)
 				NOD = i;
-		if (NOD == 1)
-			break;
 		m_Numerator /= NOD;
 		m_Denominator /= NOD;
 	}
