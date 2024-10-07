@@ -88,7 +88,6 @@ void Fraction::fractionReduction()
 		m_Denominator *= -1;
 	}
 }
-
 void Fraction::inputFraction()
 {
 	std::cout << "Enter numerator fraction: ";
@@ -113,7 +112,7 @@ Fraction::Fraction(int Numerator, int Denominator)
 {
 	if (Denominator == 0)
 	{
-		std::cout << "Denominator cannot be == 0" << std::endl;
+		std::cout << "Denominator cannot be == 0 ====> " << m_Numerator << "/" << m_Denominator << " = 0/1" << std::endl;
 		m_Numerator = 0;
 		m_Denominator = 1;
 	}
@@ -142,7 +141,8 @@ int Fraction::Numerator() const
 }
 int main()
 {
-	Fraction a, b, sum, difference, product, quotient, deg; int degree;
+	Fraction a, b, sum, difference, product, quotient, deg;
+	int degree;
 	a.inputFraction();
 	a.fractionReduction();
 	a.outputFraction();
