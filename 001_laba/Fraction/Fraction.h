@@ -6,25 +6,25 @@ class Fraction
 {
 public:
 	Fraction();
-	Fraction(int Numerator, int Denominator);
+	Fraction(int numerator, int denominator);
 	void setNumerator(int);
 	void setDenominator(int);
-	int Numerator() const;
-	int Denominator() const;
-	Fraction operator+(Fraction const b);
-	Fraction operator-(Fraction const b);
-	Fraction operator*(Fraction const b);
-	Fraction operator/(Fraction const b);
-	bool operator>(Fraction const b);
-	bool operator<(Fraction const b);
-	bool operator==(Fraction const b);
-	bool operator!=(Fraction const b);
+	int numerator() const;
+	int denominator() const;
+	Fraction operator+(Fraction const b) const;
+	Fraction operator-(Fraction const b) const;
+	Fraction operator*(Fraction const b) const;
+	Fraction operator/(Fraction const b) const;
+	bool operator>(Fraction const b) const;
+	bool operator<(Fraction const b) const;
+	bool operator==(Fraction const b) const;
+	bool operator!=(Fraction const b) const;
 	Fraction operator^(int n);
-	bool denBigger(Fraction const b);
+	bool denBigger(Fraction const b) const;
 	void fractionReduction();
 	void inputFraction();
 	void outputFraction();
 private:
-	int m_Numerator = 1;
-	int m_Denominator = 1;
+	int m_numerator = 1;
+	int m_denominator = 1;
 };
