@@ -1,5 +1,5 @@
 ﻿#include <iostream>
-#include "C:\O-O-P\001_laba\Fraction\Fraction.cpp"
+#include "..\Fraction\Fraction.h"
 int main()
 {
 	Fraction a, b, sum, difference, product, quotient, deg;

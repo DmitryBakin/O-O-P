@@ -1,4 +1,5 @@
-﻿#include "Fraction.h"
+﻿#include <iostream>
+#include "Fraction.h"
 void swap(int& a, int& b)
 {
 	int c;
@@ -123,13 +124,20 @@ Fraction::Fraction(int numerator, int denominator)
 
 	}
 }
-void Fraction::setNumerator(int Numerator)
+void Fraction::setNumerator(int numerator)
 {
-	m_numerator = Numerator;
+	m_numerator = numerator;
 }
-void Fraction::setDenominator(int Denominator)
+void Fraction::setDenominator(int denominator)
 {
-	m_denominator = Denominator;
+	if (denominator != 0)
+		m_denominator = denominator;
+	else
+	{
+		std::cout << "Denominator cannot be == 0 ====> " << m_numerator << "/" << denominator << " = 0/1" << std::endl;
+		m_numerator = 0;
+		m_denominator = 1;
+	}
 }
 int Fraction::denominator() const
 {

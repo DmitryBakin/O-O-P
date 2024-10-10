@@ -1,11 +1,11 @@
-﻿#include <iostream>
+﻿#pragma once
 class Fraction
 {
 public:
 	Fraction();
 	Fraction(int numerator, int denominator);
-	void setNumerator(int);
-	void setDenominator(int);
+	void setNumerator(int numerator);
+	void setDenominator(int denominator);
 	int numerator() const;
 	int denominator() const;
 	Fraction operator+(Fraction const b) const;
