@@ -4,32 +4,32 @@ int main()
 {
 	Fraction a, b, sum, difference, product, quotient, deg;
 	int degree;
-	a.inputFraction();
-	a.fractionReduction();
-	a.outputFraction();
-	b.inputFraction();
-	b.fractionReduction();
-	b.outputFraction();
+	a.input();
+	a.reduce();
+	a.output();
+	b.input();
+	b.reduce();
+	b.output();
 
 	sum = a + b;
-	sum.fractionReduction();
+	sum.reduce();
 	std::cout << "a + b = ";
-	sum.outputFraction();
+	sum.output();
 
 	difference = a - b;
-	difference.fractionReduction();
+	difference.reduce();
 	std::cout << "a - b = ";
-	difference.outputFraction();
+	difference.output();
 
 	product = a * b;
-	product.fractionReduction();
+	product.reduce();
 	std::cout << "a * b = ";
-	product.outputFraction();
+	product.output();
 
 	quotient = a / b;
-	quotient.fractionReduction();
+	quotient.reduce();
 	std::cout << "a / b = ";
-	quotient.outputFraction();
+	quotient.output();
 
 	if (a > b)
 		std::cout << "a > b" << std::endl;
@@ -52,6 +52,6 @@ int main()
 	std::cin >> degree;
 	deg = a ^ degree;
 	std::cout << "a ^ " << degree << " = ";
-	deg.outputFraction();
+	deg.output();
 	return 0;
 }

@@ -71,7 +71,7 @@ bool Fraction::denBigger(Fraction const b) const
 {
 	return (m_denominator > b.m_denominator);
 }
-void Fraction::fractionReduction()
+void Fraction::reduce()
 {
 	int LCD = 0;
 	while (LCD != 1)
@@ -89,7 +89,7 @@ void Fraction::fractionReduction()
 		m_denominator *= -1;
 	}
 }
-void Fraction::inputFraction()
+void Fraction::input()
 {
 	std::cout << "Enter numerator fraction: ";
 	std::cin >> m_numerator;
@@ -102,7 +102,7 @@ void Fraction::inputFraction()
 		m_denominator = 1;
 	}
 }
-void Fraction::outputFraction()
+void Fraction::output()
 {
 	std::cout << m_numerator << "/" << m_denominator << std::endl;
 }
@@ -113,7 +113,6 @@ Fraction::Fraction(int numerator, int denominator)
 {
 	if (denominator == 0)
 	{
-		std::cout << "Denominator cannot be == 0 ====> " << m_numerator << "/" << m_denominator << " = 0/1" << std::endl;
 		m_numerator = 0;
 		m_denominator = 1;
 	}
@@ -134,7 +133,6 @@ void Fraction::setDenominator(int denominator)
 		m_denominator = denominator;
 	else
 	{
-		std::cout << "Denominator cannot be == 0 ====> " << m_numerator << "/" << denominator << " = 0/1" << std::endl;
 		m_numerator = 0;
 		m_denominator = 1;
 	}

@@ -1,4 +1,4 @@
-﻿#pragma once
+﻿
 class Fraction
 {
 public:
@@ -18,9 +18,9 @@ public:
 	bool operator!=(Fraction const b) const;
 	Fraction operator^(int n);
 	bool denBigger(Fraction const b) const;
-	void fractionReduction();
-	void inputFraction();
-	void outputFraction();
+	void reduce();
+	void input();
+	void output();
 private:
 	int m_numerator = 1;
 	int m_denominator = 1;
