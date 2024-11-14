@@ -31,8 +31,10 @@ public:
 	int search(int const value) const;
 	void sort();
 	bool insert(int const value, int const index);
-	bool insert(iterator index);
+	bool insert(iterator index, int const value);
 	bool remove(int const index);
+	bool remove(iterator index);
+	bool remove(iterator itBegin,iterator itEnd);
 	bool removeValue(int const value);
 	void removeAllValue(int const value);
 

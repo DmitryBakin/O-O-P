@@ -118,8 +118,7 @@ bool Array::insert(int const value, int const index)
 	{
 		return false;
 	}
-	int* newArray;
-	newArray = new int[m_size + 1];
+	int* newArray = new int[m_size + 1];
 	for (int i = 0; i < index; i++)
 	{
 		newArray[i] = m_array[i];
@@ -134,9 +133,27 @@ bool Array::insert(int const value, int const index)
 	m_size++;
 	return true;
 }
-bool Array::insert(iterator index)
-{
-	;
+bool Array::insert(iterator const index, int const value)
+{	
+	if (index < begin() || index > end())
+	{
+		return false;
+	}
+	int i = 0;
+	int *newArray = new int[m_size + 1];
+	for(iterator it = begin(); it != index;it++,i++)
+	{
+		newArray[i] = (*it);
+	}
+	newArray[i] = value;
+	for(iterator it = index; it != end();it++,i++)
+	{
+		newArray[i+1] = (*it);
+	}
+	delete[] m_array;
+	m_array = newArray;
+	m_size++;
+	return true;
 }
 bool Array::remove(int const index)
 {
@@ -157,6 +174,49 @@ bool Array::remove(int const index)
 	delete[] m_array;
 	m_array = newArray;
 	m_size--;
+	return true;
+}
+bool Array::remove(iterator const index) 
+{
+	if (index < begin() || index >= end())
+	{
+		return false;
+	}
+	int i = 0;
+	int* newArray = new int[m_size - 1];
+	for (iterator it = begin(); it != index; it++, i++)
+	{
+		newArray[i] = (*it);
+	}
+	for (iterator it = index + 1; it != end(); it++, i++)
+	{
+		newArray[i] = (*it);
+	}
+	delete[] m_array;
+	m_array = newArray;
+	m_size--;
+	return true;
+}
+bool Array::remove(iterator const itBegin, iterator const itEnd)
+{
+	if (itBegin < begin() || itBegin >= end() || itEnd < begin() || itEnd >= end() || itBegin > itEnd)
+	{
+		return false;
+	}
+	int i = 0;
+	int* newArray = new int[m_size - (itEnd - itBegin)];
+	for (iterator it = begin(); it != itBegin; it++, i++)
+	{
+		newArray[i] = (*it);
+	}
+	for (iterator it = itEnd; it != end(); it++, i++)
+	{
+		newArray[i] = (*it);
+	}
+	delete[] m_array;
+	m_array = newArray;
+	m_size-= (itEnd - itBegin);
+	return true;
 	return true;
 }
 bool Array::removeValue(int const value)
@@ -300,7 +360,7 @@ bool Array::operator!=(const Array& other)
 - удаление всех элементов с заданным значением+;
 - поиск максимального/минимального элемента+;
 - получение итераторов на начало/конец массива +(методы должны называться begin и end. Метод end должен возвращать итератор не на последний элемент, а за позицию после него);
-- вставка элемента перед итератором;
+- вставка элемента перед итератором+;
 - удаление элемента или диапазона элементов с помощью итераторов.
 
 Необходимые перегрузки:
