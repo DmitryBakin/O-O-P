@@ -2,7 +2,7 @@
 #include <iostream>
 void main()
 {
-    Array<char> fractionArr(3);
-    fractionArr.input();
-    fractionArr.output();
+	Array<int> fractionArr(3);
+	fractionArr >> std::cin;
+	fractionArr << std::cout;
 }

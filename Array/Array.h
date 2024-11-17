@@ -53,6 +53,8 @@ public:
 	Array& operator+=(ItemType const value);
 	Array operator+(const Array& other);
 	Array& operator+=(const Array& other);
+	void operator<<(std::ostream& cout);
+	void operator>>(std::istream& cin);
 
 	bool operator==(const Array& other);
 	bool operator!=(const Array& other);
@@ -439,6 +441,20 @@ Array<ItemType>& Array<ItemType>::operator+=(const Array<ItemType>& other)
 {
 	operator+(other).swap(*this);
 	return *this;
+}
+
+template <typename ItemType>
+void Array<ItemType>::operator<<(std::ostream& cout)
+{
+	for(int i = 0; i < m_size; i++)
+		cout << m_array[i] << " ";
+}
+
+template <typename ItemType>
+void Array<ItemType>::operator>>(std::istream& cin)
+{
+	for(int i = 0; i < m_size; i++)
+		cin >> m_array[i];
 }
 
 template <typename ItemType>
