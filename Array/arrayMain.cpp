@@ -2,7 +2,8 @@
 #include <iostream>
 void main()
 {
-	Array<int> fractionArr(3);
-	fractionArr >> std::cin;
-	fractionArr << std::cout;
+	Array<int> arr(10);
+	Array<int> ar(arr);
+	std::cout << ar;
+	std::cout << "\n" << arr;
 }

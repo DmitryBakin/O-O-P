@@ -33,7 +33,7 @@ public:
 	int search(ItemType const value) const;
 	void sort();
 
-	bool insert(ItemType const value, int const index);
+	bool insert(int const index, ItemType const value);
 	bool insert(iterator const index, ItemType const value);
 
 	bool remove(int const index);
@@ -42,8 +42,8 @@ public:
 	bool removeValue(ItemType const value);
 	void removeAllValue(ItemType const value);
 
-	int max() const;
-	int min() const;
+	int maxIndex() const;
+	int minIndex() const;
 
 	ItemType& operator[](int index);
 	const ItemType& operator[](int index) const;
@@ -53,8 +53,8 @@ public:
 	Array& operator+=(ItemType const value);
 	Array operator+(const Array& other);
 	Array& operator+=(const Array& other);
-	void operator<<(std::ostream& cout);
-	void operator>>(std::istream& cin);
+	friend std::ostream& operator<<(std::ostream& r,const Array<ItemType>& other);
+	friend std::istream& operator>>(std::istream& r,const Array<ItemType>& other);
 
 	bool operator==(const Array& other);
 	bool operator!=(const Array& other);
@@ -99,14 +99,9 @@ Array<ItemType>::Array(const Array& other)
 
 template <typename ItemType>
 Array<ItemType>::Array(Array&& other)
-	: m_size(other.m_size)
+	: m_size(std::move(other.m_size))
+	, m_array(std::move(other.m_array))
 {
-	m_array = new ItemType[m_size];
-	for (int i = 0; i < m_size; i++)
-	{
-		m_array[i] = other.m_array[i];
-	}
-	other.m_array = nullptr;
 }
 
 template <typename ItemType>
@@ -198,25 +193,13 @@ void Array<ItemType>::sort()
 }
 
 template <typename ItemType>
-bool Array<ItemType>::insert(ItemType const value, int const index)
+bool Array<ItemType>::insert(int const index, ItemType const value)
 {
 	if (index < 0 || index >= m_size)
 	{
 		return false;
 	}
-	ItemType* newArray = new ItemType[m_size + 1];
-	for (int i = 0; i < index; i++)
-	{
-		newArray[i] = m_array[i];
-	}
-	newArray[index] = value;
-	for (int i = index + 1; i < m_size + 1; i++)
-	{
-		newArray[i] = m_array[i - 1];
-	}
-	delete[] m_array;
-	m_array = newArray;
-	m_size++;
+	insert(begin() + index, value);
 	return true;
 }
 
@@ -251,19 +234,7 @@ bool Array<ItemType>::remove(int const index)
 	{
 		return false;
 	}
-	ItemType* newArray;
-	newArray = new ItemType[m_size - 1];
-	for (int i = 0; i < index; i++)
-	{
-		newArray[i] = m_array[i];
-	}
-	for (int i = index; i < m_size; i++)
-	{
-		newArray[i] = m_array[i + 1];
-	}
-	delete[] m_array;
-	m_array = newArray;
-	m_size--;
+	insert(begin() + index);
 	return true;
 }
 
@@ -274,19 +245,7 @@ bool Array<ItemType>::remove(iterator const index)
 	{
 		return false;
 	}
-	int i = 0;
-	ItemType* newArray = new ItemType[m_size - 1];
-	for (iterator it = begin(); it != index; it++, i++)
-	{
-		newArray[i] = (*it);
-	}
-	for (iterator it = index + 1; it != end(); it++, i++)
-	{
-		newArray[i] = (*it);
-	}
-	delete[] m_array;
-	m_array = newArray;
-	m_size--;
+	remove(index, index);
 	return true;
 }
 
@@ -298,19 +257,18 @@ bool Array<ItemType>::remove(iterator const itBegin, iterator const itEnd)
 		return false;
 	}
 	int i = 0;
-	ItemType* newArray = new ItemType[m_size - (itEnd - itBegin)];
+	ItemType* newArray = new ItemType[m_size - (itEnd - itBegin) - 1];
 	for (iterator it = begin(); it != itBegin; it++, i++)
 	{
 		newArray[i] = (*it);
 	}
-	for (iterator it = itEnd; it != end(); it++, i++)
+	for (iterator it = itEnd + 1; it != end(); it++, i++)
 	{
 		newArray[i] = (*it);
 	}
 	delete[] m_array;
 	m_array = newArray;
-	m_size -= (itEnd - itBegin);
-	return true;
+	m_size -= (itEnd - itBegin) + 1;
 	return true;
 }
 
@@ -339,12 +297,11 @@ bool Array<ItemType>::removeValue(ItemType const value)
 template <typename ItemType>
 void Array<ItemType>::removeAllValue(ItemType const value)
 {
-	while (removeValue(value))
-		removeValue(value);
+	while (removeValue(value));
 }
 
 template <typename ItemType>
-int Array<ItemType>::max() const
+int Array<ItemType>::maxIndex() const
 {
 	int max_index = 0;
 	for (int i = 1; i < m_size; i++)
@@ -354,7 +311,7 @@ int Array<ItemType>::max() const
 }
 
 template <typename ItemType>
-int Array<ItemType>::min() const
+int Array<ItemType>::minIndex() const
 {
 	int min_index = 0;
 	for (int i = 1; i < m_size; i++)
@@ -444,17 +401,19 @@ Array<ItemType>& Array<ItemType>::operator+=(const Array<ItemType>& other)
 }
 
 template <typename ItemType>
-void Array<ItemType>::operator<<(std::ostream& cout)
+std::ostream& operator<<(std::ostream& r, Array<ItemType>& other)
 {
-	for(int i = 0; i < m_size; i++)
-		cout << m_array[i] << " ";
+	for (int i = 0; i < other.size(); i++)
+		r << other[i] << " ";
+	return r;
 }
 
 template <typename ItemType>
-void Array<ItemType>::operator>>(std::istream& cin)
+std::istream& operator>>(std::istream& r, Array<ItemType>& other)
 {
-	for(int i = 0; i < m_size; i++)
-		cin >> m_array[i];
+	for(int i = 0; i < other.size(); i++)
+		r >> other[i];
+	return r;
 }
 
 template <typename ItemType>
