@@ -20,13 +20,19 @@ public:
 	~BoolVector();
 
 	int length() const;
+	int weight() const;
+
 	void swap(BoolVector& other);
+	void inversion();
+	void inversion(int index);
 
 	bool bitValue(int index) const;
 	void setBitValue(int index, bool value);
+	void setBitValues(int index, int length, bool value);
+	void setValue(bool value);
 
-	friend std::istream& operator<<(std::istream& is, const BoolVector boolVector);
-	friend std::ostream& operator<<(std::ostream& os, const BoolVector boolVector);
+	friend std::istream& operator>>(std::istream& is, BoolVector& boolVector);
+	friend std::ostream& operator<<(std::ostream& os, const BoolVector& boolVector);
 	BoolVector& operator=(const BoolVector& other);
 	Rank operator[](int index);
 

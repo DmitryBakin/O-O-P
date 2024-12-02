@@ -83,13 +83,40 @@ int BoolVector::length() const
 	return m_length;
 }
 
+int BoolVector::weight() const
+{
+	int sum = 0;
+	for (int i = 0; i < m_length; i++)
+	{
+		if (bitValue(i))
+			sum++;
+	}
+	return sum;
+}
+
 void BoolVector::swap(BoolVector& other) {
 	std::swap(m_cells, other.m_cells);
 	std::swap(m_cellCount, other.m_cellCount);
 	std::swap(m_length, other.m_length);
 }
 
-bool BoolVector::bitValue(int index) const {
+void BoolVector::inversion()
+{
+	for (int i = 0; i < m_cellCount; i++)
+	{
+		m_cells[i] = ~m_cells[i];
+	}
+}
+
+void BoolVector::inversion(int index)
+{
+	assert(index >= 0 && index < m_length);
+	Cell mask = _mask(index);
+	m_cells[index / CellSize] = ~(m_cells[index / CellSize] ^ ~mask);
+}
+
+bool BoolVector::bitValue(int index) const
+{
 	assert(index >= 0 && index < m_length);
 	Cell mask = _mask(index);
 	return m_cells[index / CellSize] & mask;
@@ -106,6 +133,27 @@ void BoolVector::setBitValue(int index, bool value)
 	else
 	{
 		m_cells[index / CellSize] &= ~mask;
+	}
+}
+
+void BoolVector::setBitValues(int index, int length, bool value)
+{
+	assert(index >=0 && index < m_length && m_length >= length - index);
+	for (int i = index; i < index + length; i++)
+		setBitValue(i, value);
+}
+
+void BoolVector::setValue(bool value)
+{
+	if (value)
+	{
+		for (int i = 0; i < m_cellCount; i++)
+			m_cells[i] = ~0;
+	}
+	else
+	{
+		for (int i = 0; i < m_cellCount; i++)
+			m_cells[i] = 0;
 	}
 }
 
@@ -162,13 +210,15 @@ BoolVector::Rank::operator bool() const
 {
 	return(*m_cell & m_mask) != 0;
 }
-std::istream& operator<<(std::istream& is, BoolVector boolVector)
+
+std::istream& operator>>(std::istream& is, BoolVector& boolVector)
 {
 	for (int i = 0; i < boolVector.length(); i++)
+		is >> boolVector[i];
 	return is;
 }
 
-std::ostream& operator<<(std::ostream& os, BoolVector boolVector)
+std::ostream& operator<<(std::ostream& os, BoolVector& boolVector)
 {
 	for (int i = 0; i < boolVector.length(); i++)
 		os << boolVector[i];
@@ -178,17 +228,19 @@ std::ostream& operator<<(std::ostream& os, BoolVector boolVector)
 
 
 
+
+
 /*Необходимые методы класса :
--конструкторы(по умолчанию, с параметрами(размер и значение - одно и то же для всех разрядов), конструктор из массива const char*, конструктор копирования);
--деструктор;
--длина(количество бит) вектора;
--обмен содержимого с другим вектором(swap);
--ввод / вывод в консоль(потоковый);
--инверсия всех компонент вектора;
--инверсия i - ой компоненты;
--установка в 0 / 1 i - ой компоненты;
--установка в 0 / 1 k компонент, начиная с i - ой;
--установка в 0 / 1 всех компонент вектора;
+-+конструкторы(по умолчанию, с параметрами(размер и значение - одно и то же для всех разрядов), конструктор из массива const char*, конструктор копирования);
+-+деструктор;
+-+длина(количество бит) вектора;
+-+обмен содержимого с другим вектором(swap);
+-(-+)ввод / вывод в консоль(потоковый);
+-+инверсия всех компонент вектора;
+-+инверсия i - ой компоненты;
+-+установка в 0 / 1 i - ой компоненты;
+-+установка в 0 / 1 k компонент, начиная с i - ой;
+-+установка в 0 / 1 всех компонент вектора;
 -вес вектора(количество единичных компонент).
 
 Необходимые перегрузки :
