@@ -108,21 +108,21 @@ void BoolVector::inversion()
 	}
 }
 
-void BoolVector::inversion(int index)
+void BoolVector::inversion(int const index)
 {
 	assert(index >= 0 && index < m_length);
 	Cell mask = _mask(index);
 	m_cells[index / CellSize] = ~(m_cells[index / CellSize] ^ ~mask);
 }
 
-bool BoolVector::bitValue(int index) const
+bool BoolVector::bitValue(int const index) const
 {
 	assert(index >= 0 && index < m_length);
 	Cell mask = _mask(index);
 	return m_cells[index / CellSize] & mask;
 }
 
-void BoolVector::setBitValue(int index, bool value)
+void BoolVector::setBitValue(int const index, bool const value)
 {
 	assert(index >= 0 && index < m_length);
 	Cell mask = _mask(index);
@@ -136,14 +136,14 @@ void BoolVector::setBitValue(int index, bool value)
 	}
 }
 
-void BoolVector::setBitValues(int index, int length, bool value)
+void BoolVector::setBitValues(int const index, int const length, bool const value)
 {
 	assert(index >=0 && index < m_length && m_length >= length - index);
 	for (int i = index; i < index + length; i++)
 		setBitValue(i, value);
 }
 
-void BoolVector::setValue(bool value)
+void BoolVector::setValue(bool const value)
 {
 	if (value)
 	{
@@ -159,6 +159,105 @@ void BoolVector::setValue(bool value)
 
 BoolVector& BoolVector::operator=(const BoolVector& other)
 {
+	BoolVector bvCopy(other);
+	swap(bvCopy);
+	return *this;
+}
+
+BoolVector BoolVector::operator&(const BoolVector& other) const
+{
+	BoolVector bvCopy(*this);
+	for (int i = 0; i < m_cellCount; i++)
+		bvCopy.m_cells[i] = m_cells[i] & other.m_cells[i];
+	return bvCopy;
+}
+
+BoolVector& BoolVector::operator&=(const BoolVector& other)
+{
+	for (int i = 0; i < m_cellCount; i++)
+		m_cells[i] &= other.m_cells[i];
+	return *this;
+}
+
+BoolVector BoolVector::operator|(const BoolVector& other) const
+{
+	BoolVector bvCopy(*this);
+	for (int i = 0; i < m_cellCount; i++)
+		bvCopy.m_cells[i] = m_cells[i] | other.m_cells[i];
+	return bvCopy;
+}
+
+BoolVector& BoolVector::operator|=(const BoolVector& other)
+{
+	for (int i = 0; i < m_cellCount; i++)
+		m_cells[i] |= other.m_cells[i];
+	return *this;
+}
+
+BoolVector BoolVector::operator^(const BoolVector& other) const
+{
+	BoolVector bvCopy(*this);
+	for (int i = 0; i < m_cellCount; i++)
+		bvCopy.m_cells[i] = m_cells[i] ^ other.m_cells[i];
+	return bvCopy;
+}
+
+BoolVector& BoolVector::operator^=(const BoolVector& other)
+{
+	for (int i = 0; i < m_cellCount; i++)
+		m_cells[i] ^= other.m_cells[i];
+	return *this;
+}
+
+BoolVector BoolVector::operator~() const
+{
+	BoolVector bvCopy(*this);
+	bvCopy.inversion();
+	return bvCopy;
+}
+
+BoolVector BoolVector::operator>>(int const shift) const
+{
+	if (shift <= 0)
+		return *this;
+	BoolVector result(m_length);
+	if (shift >= m_length)
+		return result;
+	for (int i = shift; i < m_length; i++)
+	{
+		if (bitValue(i - shift)) 
+		{
+			result.setBitValue(i, true);
+		}
+	}
+	return result;
+}
+
+BoolVector& BoolVector::operator>>=(int const shift)
+{
+	*this = *this >> shift;
+	return *this;
+}
+
+BoolVector BoolVector::operator<<(int const shift) const
+{
+	if (shift <= 0)
+		return *this;
+	BoolVector result(m_length);
+	if (shift >= m_length)
+		return result;
+	for (int i = 0; i < m_length - shift; ++i) {
+		if (bitValue(i + shift)) {
+			result.setBitValue(i, true);
+		}
+	}
+
+	return result;
+}
+
+BoolVector& BoolVector::operator<<=(int const shift)
+{
+	*this = *this << shift;
 	return *this;
 }
 
@@ -184,8 +283,7 @@ BoolVector::Rank::Rank(Cell* cell, Cell mask)
 	:m_cell(cell)
 	,m_mask(mask)
 {
-	assert(m_cell != nullptr);
-	assert(m_mask > 0);
+	assert(m_cell != nullptr && m_mask > 0);
 }
 
 BoolVector::Rank& BoolVector::Rank::operator=(const Rank& other)
@@ -214,49 +312,18 @@ BoolVector::Rank::operator bool() const
 std::istream& operator>>(std::istream& is, BoolVector& boolVector)
 {
 	for (int i = 0; i < boolVector.length(); i++)
-		is >> boolVector[i];
+	{
+		bool bit;
+		is >> bit;
+		boolVector.setBitValue(i, bit);
+	}
 	return is;
 }
 
-std::ostream& operator<<(std::ostream& os, BoolVector& boolVector)
+std::ostream& operator<<(std::ostream& os, BoolVector boolVector)
 {
 	for (int i = 0; i < boolVector.length(); i++)
 		os << boolVector[i];
 	return os;
 }
-
-
-
-
-
-
-/*Необходимые методы класса :
--+конструкторы(по умолчанию, с параметрами(размер и значение - одно и то же для всех разрядов), конструктор из массива const char*, конструктор копирования);
--+деструктор;
--+длина(количество бит) вектора;
--+обмен содержимого с другим вектором(swap);
--(-+)ввод / вывод в консоль(потоковый);
--+инверсия всех компонент вектора;
--+инверсия i - ой компоненты;
--+установка в 0 / 1 i - ой компоненты;
--+установка в 0 / 1 k компонент, начиная с i - ой;
--+установка в 0 / 1 всех компонент вектора;
--вес вектора(количество единичных компонент).
-
-Необходимые перегрузки :
--получение компоненты([], см.примечание ниже);
--побитовое умножение(&, &=);
--побитовое сложение(| , |=);
--побитовое исключающее ИЛИ(^, ^=);
--побитовые сдвиги(<< , >> , <<=, >>=);
--побитовая инверсия(~);
--присваивание(= ).
-
-Примечание: получение компоненты подразумевается только на чтение(т.е., возвращается значение бита в виде int / char / bool, а записать значение в бит нельзя - для этого можно использовать соответствующую функцию).Однако есть способ реализовать данный оператор с возможностью записи значения в соответствующий разряд.Для решения этой задачи предлагается следующий подход :
-Оператор[i] возвращает объект некоторого нового класса(далее "класс BoolRank"), который :
-	1. Имеет доступ к ячейке, содержащей i - ую компоненту;
-2. Содержит информацию о позиции компоненты в ячейке.
-Т.о., используя битовую маску, объект класса BoolRank может изменять значения нужного бита.
-Всё, что после этого будет нужно реализовать - перегрузки стандартных операций(присваивание, битовое сложение, умножение, инверсия, исключающее ИЛИ.Рекомендуется также определить операции сравнения и присваивание, как между объектами класса BoolRank, так и с одним из базовых типов(int / bool / char), а также конвертацию типа Rank в один из базовых типов.
-*/
 

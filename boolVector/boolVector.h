@@ -24,16 +24,27 @@ public:
 
 	void swap(BoolVector& other);
 	void inversion();
-	void inversion(int index);
+	void inversion(int const index);
 
-	bool bitValue(int index) const;
-	void setBitValue(int index, bool value);
-	void setBitValues(int index, int length, bool value);
-	void setValue(bool value);
+	bool bitValue(int const index) const;
+	void setBitValue(int const index, bool const value);
+	void setBitValues(int const index, int const length, bool const value);
+	void setValue(bool const value);
 
 	friend std::istream& operator>>(std::istream& is, BoolVector& boolVector);
-	friend std::ostream& operator<<(std::ostream& os, const BoolVector& boolVector);
+	friend std::ostream& operator<<(std::ostream& os, const BoolVector boolVector);
 	BoolVector& operator=(const BoolVector& other);
+	BoolVector operator&(const BoolVector& other) const;
+	BoolVector& operator&=(const BoolVector& other);
+	BoolVector operator|(const BoolVector& other) const;
+	BoolVector& operator|=(const BoolVector& other);
+	BoolVector operator^(const BoolVector& other) const;
+	BoolVector& operator^=(const BoolVector& other);
+	BoolVector operator~() const;
+	BoolVector operator>>(int const shift) const;
+	BoolVector& operator>>=(int const shift);
+	BoolVector operator<<(int const shift) const;
+	BoolVector& operator<<=(int const shift);
 	Rank operator[](int index);
 
 
