@@ -14,7 +14,7 @@ public:
 	typedef ItemType difference_type;
 public:
 	Array();
-	Array(int size);
+	Array(int const size);
 	Array(const Array& other);
 	Array(Array&& other);
 	~Array();
@@ -37,7 +37,7 @@ public:
 	bool insert(iterator const index, ItemType const value);
 
 	bool remove(int const index);
-	bool remove(iterator index);
+	bool remove(iterator const index);
 	bool remove(iterator const itBegin,iterator const itEnd);
 	bool removeValue(ItemType const value);
 	void removeAllValue(ItemType const value);
@@ -45,8 +45,8 @@ public:
 	int maxIndex() const;
 	int minIndex() const;
 
-	ItemType& operator[](int index);
-	const ItemType& operator[](int index) const;
+	ItemType& operator[](int const index);
+	const ItemType& operator[](int const index) const;
 	Array& operator=(const Array& other);
 	Array& operator=(Array&& other);
 	Array operator+(ItemType const value);
@@ -74,7 +74,7 @@ Array<ItemType>::Array()
 }
 
 template <typename ItemType>
-Array< ItemType>::Array(int size)
+Array< ItemType>::Array(int const size)
 {
 	if (size < 0)
 		size = -size;
@@ -234,7 +234,7 @@ bool Array<ItemType>::remove(int const index)
 	{
 		return false;
 	}
-	insert(begin() + index);
+	remove(begin() + index);
 	return true;
 }
 
@@ -321,14 +321,14 @@ int Array<ItemType>::minIndex() const
 }
 
 template <typename ItemType>
-ItemType& Array<ItemType>::operator[](int index)
+ItemType& Array<ItemType>::operator[](int const index)
 {
 	assert(index >= 0 && index < m_size);
 	return m_array[index];
 }
 
 template <typename ItemType>
-const ItemType& Array<ItemType>::operator[](int index) const
+const ItemType& Array<ItemType>::operator[](int const index) const
 {
 	assert(index >= 0 && index < m_size);
 	return m_array[index];
