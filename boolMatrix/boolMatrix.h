@@ -1,0 +1,77 @@
+#pragma once
+#include <iostream>
+#include <assert.h>
+#include "C:/O-O-P/boolVector/boolVector.h"
+#include "C:/O-O-P/Array/Array.h"
+
+class BoolMatrix 
+{
+public:
+
+	BoolMatrix();
+	BoolMatrix(int const lineCount, int const columnCount, bool value);
+	BoolMatrix(const BoolMatrix& other);
+	BoolMatrix(const char** other, int const lineCount);
+	~BoolMatrix();
+
+	int lineCount() const;
+	int columnCount() const;
+	int weight() const;
+	int weightLine(int const index) const;
+
+	void swap(BoolMatrix& other);
+	void inversionComponent(int const line, int const column);
+	void inversionComponents(int const line, int const column, int const k);
+
+	void setComponent(int line, int column, bool value);
+	void setComponents(int line, int column, int k, bool value);
+
+	BoolVector conjunctionAllLines() const;
+	BoolVector disjunctionAllLines() const;
+
+	BoolVector& operator[](int const index);
+	const BoolVector& operator[](int const index) const;
+
+	BoolMatrix& operator=(const BoolMatrix& other);
+	BoolMatrix operator&(const BoolMatrix& other) const;
+	BoolMatrix& operator&=(const BoolMatrix& other);
+	BoolMatrix operator|(const BoolMatrix& other) const;
+	BoolMatrix& operator|=(const BoolMatrix& other);
+	BoolMatrix operator^(const BoolMatrix& other) const;
+	BoolMatrix& operator^=(const BoolMatrix& other);
+	BoolMatrix operator~() const;
+
+	friend std::ostream& operator<<(std::ostream& os, BoolMatrix& other);
+	friend std::istream& operator>>(std::istream& is, BoolMatrix& other);
+
+private:
+	Array<BoolVector> m_matrix;
+	int m_lineCount = 0;
+	int m_columnCount = 0;
+
+};
+
+
+/*
++ конструкторы (по умолчанию, с параметрами (количество строк/столбцов и значения разрядов), конструктор из матрицы char, конструктор копирования);
++ деструктор;
++ получение числа строк и столбцов матрицы;
++ обмен содержимого с другой матрицей (swap);
++ ввод/вывод в консоль (потоковый);
++ вес матрицы (количество единичных компонент);
++ конъюнкция всех строк (возвращает булев вектор);
++ дизъюнкция всех строк (возвращает булев вектор);
++ вес j-ой строки;
++ инверсия в i-ой компоненты j-ой строки;
++ инверсия k компонент j-ой строки, начиная с i-ой компоненты;
++ установка в 0/1 i-ой компоненты j-ой строки;
++ установка в 0/1 k компонент j-ой строки, начиная с i-ой компоненты;
+
+Необходимые перегрузки:
++ присваивание (=);
++ получение строки ([ ]);
+- построчное побитовое умножение (&, &=);
+- построчное побитовое сложение (|, |=);
+- построчное побитовое исключающее ИЛИ (^, ^=);
+- построчная побитовая инверсия (~).
+*/
