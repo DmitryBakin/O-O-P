@@ -11,7 +11,7 @@ BoolMatrix::BoolMatrix(int const lineCount, int const columnCount, bool value)
 	BoolVector bv(columnCount, value);
 	for (int i = 0; i < m_lineCount; i++)
 	{
-		m_line.insert(i, bv);
+		m_matrix.insert(i, bv);
 	}
 }
 
@@ -20,7 +20,7 @@ BoolMatrix::BoolMatrix(const BoolMatrix& other)
 	, m_columnCount(other.m_lineCount)
 {
 	for (int i = 0; i < m_lineCount; i++)
-		m_line.insert(i, other[i]);
+		m_matrix.insert(i, other[i]);
 }
 
 BoolMatrix::BoolMatrix(const char** other, int const lineCount)
@@ -31,7 +31,7 @@ BoolMatrix::BoolMatrix(const char** other, int const lineCount)
 	for (int i = 0; i < m_lineCount; i++)
 	{
 		BoolVector bv(other[i]);
-		m_line.insert(i, bv);
+		m_matrix.insert(i, bv);
 	}
 }
 
@@ -53,53 +53,53 @@ int BoolMatrix::weight() const
 {
 	int weight = 0;
 	for (int i = 0; i < m_lineCount; i++)
-		weight+=m_line[i].weight();
+		weight+=m_matrix[i].weight();
 	return weight;
 }
 
 int BoolMatrix::weightLine(int const index) const
 {
 	assert(index >= 0 && index < m_lineCount);
-	return m_line[index].weight();
+	return m_matrix[index].weight();
 }
 
 void BoolMatrix::swap(BoolMatrix& other)
 {
 	std::swap(m_lineCount, other.m_lineCount);
 	std::swap(m_columnCount, other.m_columnCount);
-	m_line.swap(other.m_line);
+	m_matrix.swap(other.m_matrix);
 }
 
 void BoolMatrix::inversionComponent(int const line, int const column)
 {
 	assert(line >= 0 && line < m_lineCount);
-	m_line[line].inversion(column);
+	m_matrix[line].inversion(column);
 }
 
 void BoolMatrix::inversionComponents(int const line, int const column, int const k)
 {
 	assert(line >= 0 && line < m_lineCount);
 	for(int i = 0; i < k; i++)
-		m_line[line].inversion(column + i);
+		m_matrix[line].inversion(column + i);
 }
 
 void BoolMatrix::setComponent(int line, int column, bool value)
 {
 	assert(line >= 0 && line < m_lineCount);
-	m_line[line].setBitValue(column, value);
+	m_matrix[line].setBitValue(column, value);
 }
 
 void BoolMatrix::setComponents(int line, int column, int k, bool value)
 {
 	assert(line >= 0 && line < m_lineCount);
-	m_line[line].setBitValues(column, k, value);
+	m_matrix[line].setBitValues(column, k, value);
 }
 
 BoolVector BoolMatrix::conjunctionAllLines() const
 {
 	BoolVector bv(m_columnCount,1);
 	for (int i = 0; i < m_lineCount; i++)
-		bv = bv & m_line[i];
+		bv = bv & m_matrix[i];
 	return bv;
 }
 
@@ -107,20 +107,20 @@ BoolVector BoolMatrix::disjunctionAllLines() const
 {
 	BoolVector bv(m_columnCount, 1);
 	for (int i = 0; i < m_lineCount; i++)
-		bv = bv | m_line[i];
+		bv = bv | m_matrix[i];
 	return bv;
 }
 
 BoolVector& BoolMatrix::operator[](int const index)
 {
 	assert(index >= 0 && index < m_lineCount);
-	return m_line[index];
+	return m_matrix[index];
 }
 
 const BoolVector& BoolMatrix::operator[](int const index) const
 {
 	assert(index >= 0 && index < m_lineCount);
-	return m_line[index];
+	return m_matrix[index];
 }
 
 BoolMatrix& BoolMatrix::operator=(const BoolMatrix& other)
@@ -134,14 +134,14 @@ BoolMatrix BoolMatrix::operator&(const BoolMatrix& other) const
 {
 	BoolMatrix bmCopy(*this);
 	for (int i = 0; i < m_lineCount; i++)
-		bmCopy[i] = m_line[i] & other[i];
+		bmCopy[i] = m_matrix[i] & other[i];
 	return bmCopy;
 }
 
 BoolMatrix& BoolMatrix::operator&=(const BoolMatrix& other)
 {
 	for (int i = 0; i < m_lineCount; i++)
-		m_line[i] &= other[i];
+		m_matrix[i] &= other[i];
 	return *this;
 }
 
@@ -149,14 +149,14 @@ BoolMatrix BoolMatrix::operator|(const BoolMatrix& other) const
 {
 	BoolMatrix bmCopy(*this);
 	for (int i = 0; i < m_lineCount; i++)
-		bmCopy[i] = m_line[i] | other[i];
+		bmCopy[i] = m_matrix[i] | other[i];
 	return bmCopy;
 }
 
 BoolMatrix& BoolMatrix::operator|=(const BoolMatrix& other)
 {
 	for (int i = 0; i < m_lineCount; i++)
-		m_line[i] |= other[i];
+		m_matrix[i] |= other[i];
 	return *this;
 }
 
@@ -164,14 +164,14 @@ BoolMatrix BoolMatrix::operator^(const BoolMatrix& other) const
 {
 	BoolMatrix bmCopy(*this);
 	for (int i = 0; i < m_lineCount; i++)
-		bmCopy[i] = m_line[i] ^ other[i];
+		bmCopy[i] = m_matrix[i] ^ other[i];
 	return bmCopy;
 }
 
 BoolMatrix& BoolMatrix::operator^=(const BoolMatrix& other)
 {
 	for (int i = 0; i < m_lineCount; i++)
-		m_line[i] ^= other[i];
+		m_matrix[i] ^= other[i];
 	return *this;
 }
 
@@ -208,7 +208,7 @@ std::istream& operator>>(std::istream& is, BoolMatrix& other)
 			is >> b;
 			bv.setBitValue(j,b);
 		}
-		other.m_line.insert(i,bv);
+		other.m_matrix.insert(i,bv);
 	}
 	return is;
 }
