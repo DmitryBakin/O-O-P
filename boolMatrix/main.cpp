@@ -18,5 +18,6 @@ void main()
 	//bm2.swap(bmChar);
 	//std::cin >> bm1;
 	bm = ~bm2;
+	std::cin >> bm;
 	std::cout << bm << " ";
 }

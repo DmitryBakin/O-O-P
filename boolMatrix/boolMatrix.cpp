@@ -105,7 +105,7 @@ BoolVector BoolMatrix::conjunctionAllLines() const
 
 BoolVector BoolMatrix::disjunctionAllLines() const
 {
-	BoolVector bv(m_columnCount, 1);
+	BoolVector bv(m_columnCount, 0);
 	for (int i = 0; i < m_lineCount; i++)
 		bv = bv | m_matrix[i];
 	return bv;
@@ -192,23 +192,7 @@ std::ostream& operator<<(std::ostream& os, BoolMatrix& other)
 
 std::istream& operator>>(std::istream& is, BoolMatrix& other)
 {
-	int lineCount, columnCount;
-	is >> lineCount;
-	is >> columnCount;
-
-	other.m_lineCount = lineCount;
-	other.m_columnCount = columnCount;
-	
-	for (int i = 0; i < lineCount; i++)
-	{
-		BoolVector bv(columnCount);
-		for(int j = 0; j < columnCount;j++)
-		{
-			bool b;
-			is >> b;
-			bv.setBitValue(j,b);
-		}
-		other.m_matrix.insert(i,bv);
-	}
+	for (int i = 0; i < other.m_lineCount; i++)
+		is >> other[i];
 	return is;
 }

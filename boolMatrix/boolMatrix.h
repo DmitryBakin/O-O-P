@@ -1,8 +1,8 @@
 #pragma once
 #include <iostream>
 #include <assert.h>
-#include "C:/O-O-P/boolVector/boolVector.h"
-#include "C:/O-O-P/Array/Array.h"
+#include "../boolVector/boolVector.h"
+#include "../Array/Array.h"
 
 class BoolMatrix 
 {
