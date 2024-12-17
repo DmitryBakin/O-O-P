@@ -30,13 +30,13 @@ public:
 
     void addToHead(const T& value);
     void addToTail(const T& value);
-    void addElement(Node* position, const T& value);
+    void addElementToPosition(const int position, const T& value);
     void addElement(const T& key, const T& value);
     void addElement(iterator position, const T& value);
 
     void deleteFromHead();
     void deleteFromTail();
-    void deleteElement(Node* position);
+    void deleteElementFromPosition(const int position);
     void deleteElement(const T& key);
     void deleteElement(iterator position);
 
@@ -48,10 +48,10 @@ public:
 
     bool isEmpty() const;
 
-    Node* searchElement(const T& value);
+    iterator searchElement(const T& valueSearch);
 
-    T& min() const;
-    T& max() const;
+    T& const min() const;
+    T& const max() const;
 
     T& operator[](int const index);
     const T& operator[](int const index) const;
@@ -63,13 +63,16 @@ public:
     bool operator!=(const List<T>& other) const;
 
 
-    friend std::ostream& operator<<(const std::ostream& os, List<T>& other);
-    friend std::istream& operator>>(const std::istream& is, List<T>& other);
+    friend std::ostream& operator<<(std::ostream& os, const List<T>& other);
+    friend std::istream& operator>>(std::istream& is, List<T>& other);
 
 private:
     int m_size = 0;
     Node* m_head = nullptr;
     Node* m_tail = nullptr;
+
+    void m_addElement(Node* position, const T& value);
+    void m_deleteElement(Node* position);
 };
 
 template <typename T>
@@ -100,6 +103,7 @@ public:
 
     ItemType& operator*();
     const ItemType& operator*() const;
+    TemplateIterator operator+(const int);
     TemplateIterator operator++();
     TemplateIterator operator--();
     TemplateIterator operator++(int);
@@ -192,7 +196,6 @@ void List<T>::clear()
     {
         return;
     }
-
     Node* runner = m_head->next;
     while (runner != m_tail)
     {
@@ -208,23 +211,25 @@ void List<T>::clear()
 template<typename T>
 void List<T>::addToHead(const T& value)
 {
-    Node* node = new Node(value, m_head->next, m_head);
-    m_head->next->prev = node;
-    m_head->next = node;
-    ++m_size;
+    addElement(begin(), value);
 }
 
 template <typename T>
 void List<T>::addToTail(const T& value)
 {
-    Node* node = new Node(value, m_tail, m_tail->prev);
-    m_tail->prev->next = node;
-    m_tail->prev = node;
-    ++m_size;
+    addElement(end(), value);
 }
 
 template<typename T>
-void List<T>::addElement(Node* position, const T& value)
+void List<T>::addElementToPosition(const int position, const T& value)
+{
+    assert(position >= 0 && position <= m_size);
+    iterator runner = begin() + position;
+    addElement(runner, value);
+}
+
+template<typename T>
+void List<T>::m_addElement(Node* position, const T& value)
 {
     Node* node = new Node(value, position, position->prev);
     position->prev->next = node;
@@ -237,46 +242,38 @@ void List<T>::addElement(const T& key, const T& value)
 {
     if (searchElement(key) == nullptr)
         return;
-    Node* nodeSearch = searchElement(key);
-    addElement(nodeSearch->next, value);
+    iterator runner = searchElement(key);
+    addElement(++runner, value);
 }
 
 template<typename T>
 void List<T>::addElement(iterator position, const T& value)
 {
-    addElement(position.getNode(), value);
+    m_addElement(position.getNode(), value);
 }
 
 template<typename T>
 void List<T>::deleteFromHead()
 {
-    if (isEmpty())
-    {
-        return;
-    }
-    Node* node = new Node(m_head->next->next, m_head);
-    m_head->next = node->next;
-    node->next->prev = m_head;
-    --m_size;
-    delete node;
+    deleteElement(begin());
 }
 
 template<typename T>
 void List<T>::deleteFromTail()
 {
-    if (isEmpty())
-    {
-        return;
-    }
-    Node* node = new Node(m_tail, m_tail->prev->prev);
-    m_tail->prev = node->prev;
-    node->prev->next = m_tail;
-    --m_size;
-    delete node;
+    deleteElement(--end());
 }
 
 template<typename T>
-void List<T>::deleteElement(Node* position)
+void List<T>::deleteElementFromPosition(const int position)
+{
+    assert(position >= 0 && position <= m_size);
+    iterator runner = begin() + position;
+    deleteElement(runner);
+}
+
+template<typename T>
+void List<T>::m_deleteElement(Node* position)
 {
     if (isEmpty())
     {
@@ -296,14 +293,14 @@ void List<T>::deleteElement(const T& key)
     {
         return;
     }
-    Node* nodeSearch = searchElement(key);
-    deleteElement(nodeSearch);
+    iterator it = searchElement(key);
+    deleteElement(it);
 }
 
 template<typename T>
 void List<T>::deleteElement(iterator position)
 {
-    deleteElement(position.getNode());
+    m_deleteElement(position.getNode());
 }
 
 template<typename T>
@@ -353,27 +350,26 @@ void List<T>::sort()
 template<typename T>
 bool List<T>::isEmpty() const
 {
-    if (m_head->next == m_tail)
-        return true;
-    return false;
+    return(m_head->next == m_tail);
 }
 
 template<typename T>
 typename List<T>::template
-Node* List<T>::searchElement(const T& valueSearch)
+iterator List<T>::searchElement(const T& valueSearch)
 {
-    Node* runner = m_head->next;
-    while (runner != m_tail)
+    iterator runner = begin();
+    while (runner != end())
     {
-        if (runner->value == valueSearch)
+        if ((*runner) == valueSearch)
             return runner;
-        runner = runner->next;
+        runner = ++runner;
     }
     return nullptr;
 }
 
+
 template<typename T>
-T& List<T>::min() const
+T& const List<T>::min() const
 {
     T min;
     min = m_head->next->value;
@@ -388,7 +384,7 @@ T& List<T>::min() const
 }
 
 template<typename T>
-T& List<T>::max() const
+T& const List<T>::max() const
 {
     T max;
     max = m_head->next->value;
@@ -442,13 +438,8 @@ List<T> List<T>::operator+(const List<T>& other)
 template<typename T>
 List<T>& List<T>::operator+=(const List<T>& other)
 {
-    Node* runner = other.m_head->next;
-    while (runner != other.m_tail)
-    {
-        addToTail(runner->value);
-        runner = runner->next;
-    }
-    return (*this);
+    operator+(other).swap(*this);
+    return *this;
 }
 
 template<typename T>
@@ -477,9 +468,9 @@ bool List<T>::operator!=(const List<T>& other) const
 template <typename T>
 std::ostream& operator<<(std::ostream& os, List<T>& other)
 {
-    for (const T& value : other)
+    for (T& value : other)
     {
-        os << value << ' ';
+        os << value << " ";
     }
     os << "\n";
     return os;
@@ -490,6 +481,7 @@ std::istream& operator>>(std::istream& is, List<T>& other)
 {
     int size = other.size();
     other.clear();
+
     for (int i = 0; i < size; i++)
     {
         T value;
@@ -538,6 +530,16 @@ template <typename ItemType>
 const ItemType& List<T>::TemplateIterator<ItemType>::operator*() const
 {
     return m_node->value;
+}
+
+template <typename T>
+template <typename ItemType>
+typename List<T>::template
+TemplateIterator<ItemType> List<T>::TemplateIterator<ItemType>::operator+(const int index)
+{
+    for (int i = 0; i < index; i++)
+        m_node = m_node->next;
+    return *this;
 }
 
 template <typename T>
