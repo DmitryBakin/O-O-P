@@ -31,6 +31,9 @@ public:
 	void setBitValues(int const index, int const length, bool const value);
 	void setValue(bool const value);
 
+	bool full0() const;
+	bool full1() const;
+
 	friend std::istream& operator>>(std::istream& is, BoolVector& boolVector);
 	friend std::ostream& operator<<(std::ostream& os, const BoolVector boolVector);
 	BoolVector& operator=(const BoolVector& other);

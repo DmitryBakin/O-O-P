@@ -157,6 +157,23 @@ void BoolVector::setValue(bool const value)
 	}
 }
 
+bool BoolVector::full0() const
+{
+	for(int i = 0; i < m_cellCount; i++)
+		if(m_cells != 0)
+			return false;
+	return true;
+}
+
+bool BoolVector::full1() const
+{
+	for (int i = 0; i < m_length; i++)
+		if (!bitValue(i))
+			return false;
+	return true;
+}
+
+
 BoolVector& BoolVector::operator=(const BoolVector& other)
 {
 	BoolVector bvCopy(other);
