@@ -11,6 +11,10 @@ Set::Set(const char* array, int const size)
         m_add(array[i]);
 }
 
+Set::Set(const BoolVector& other)
+    :BoolVector(other)
+{}
+
 char Set::maxElement() const
 {
     for (int i = charSize - 1; i >= 0; i--)
@@ -52,10 +56,7 @@ bool Set::operator!=(const Set& other) const
 
 Set Set::operator|(const Set& other) const
 {
-    Set setCopy(*this);
-    for (int i = 0; i < charSize; i++)
-        if (other.bitValue(i))
-            setCopy.m_add(i);
+    Set setCopy(BoolVector::operator|(other));
     return setCopy;
 }
 
@@ -67,10 +68,7 @@ Set& Set::operator|=(const Set& other)
 
 Set Set::operator&(const Set& other) const
 {
-    Set setCopy;
-    for (int i = 0; i < charSize; i++)
-        if (other.bitValue(i) && bitValue(i))
-            setCopy.m_add(i);
+    Set setCopy(BoolVector::operator&(other));
     return setCopy;
 }
 
@@ -82,10 +80,7 @@ Set& Set::operator&=(const Set& other)
 
 Set Set::operator/(const Set& other) const
 {
-    Set setCopy;
-    for (int i = 0; i < charSize; i++)
-        if (!other.bitValue(i) && bitValue(i))
-            setCopy.m_add(i);
+    Set setCopy(BoolVector::operator&(~other));
     return setCopy;
 }
 
@@ -97,10 +92,7 @@ Set& Set::operator/=(const Set& other)
 
 Set Set::operator~() const
 {
-    Set setCopy;
-    for (int i = 0; i < charSize; i++)
-        if (!bitValue(i))
-            setCopy.m_add(i);
+    Set setCopy(BoolVector::operator~());
     return setCopy;
 }
 

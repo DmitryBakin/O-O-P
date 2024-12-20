@@ -14,6 +14,7 @@ public:
     Set();
     Set(const char* array, const int size);
     Set(const Set& other) = default;
+    Set(const BoolVector& other);
     ~Set() = default;
 
     char maxElement() const;
