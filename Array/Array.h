@@ -14,7 +14,7 @@ public:
 	typedef ItemType difference_type;
 public:
 	Array();
-	Array(int const size);
+	Array(int size);
 	Array(const Array& other);
 	Array(Array&& other);
 	~Array();
@@ -49,15 +49,15 @@ public:
 	const ItemType& operator[](int const index) const;
 	Array& operator=(const Array& other);
 	Array& operator=(Array&& other);
-	Array operator+(ItemType const value);
-	Array& operator+=(ItemType const value);
+	Array operator+(const ItemType value);
+	Array& operator+=(const ItemType value);
 	Array operator+(const Array& other);
 	Array& operator+=(const Array& other);
 	friend std::ostream& operator<<(std::ostream& r,const Array<ItemType>& other);
-	friend std::istream& operator>>(std::istream& r,const Array<ItemType>& other);
+	friend std::istream& operator>>(std::istream& r, Array<ItemType>& other);
 
-	bool operator==(const Array& other);
-	bool operator!=(const Array& other);
+	bool operator==(const Array& other) const;
+	bool operator!=(const Array& other) const;
 private:
 	ItemType* m_array = nullptr;
 	int m_size = 1;
@@ -74,7 +74,7 @@ Array<ItemType>::Array()
 }
 
 template <typename ItemType>
-Array< ItemType>::Array(int const size)
+Array<ItemType>::Array(int size)
 {
 	if (size < 0)
 		size = -size;
@@ -118,6 +118,7 @@ void Array<ItemType>::output()
 		std::cout << m_array[i] << " ";
 	}
 }
+
 template <typename ItemType>
 void Array<ItemType>::input()
 {
@@ -360,7 +361,7 @@ Array<ItemType>& Array<ItemType>::operator=(Array<ItemType>&& other)
 }
 
 template <typename ItemType>
-Array<ItemType> Array<ItemType>::operator+(ItemType const value)
+Array<ItemType> Array<ItemType>::operator+(const ItemType value)
 {
 	Array<ItemType> result(m_size + 1);
 	for (int i = 0; i < m_size; ++i)
@@ -372,7 +373,7 @@ Array<ItemType> Array<ItemType>::operator+(ItemType const value)
 }
 
 template <typename ItemType>
-Array<ItemType>& Array<ItemType>::operator+=(ItemType const value)
+Array<ItemType>& Array<ItemType>::operator+=(const ItemType value)
 {
 	operator+(value).swap(*this);
 	return *this;
@@ -401,7 +402,7 @@ Array<ItemType>& Array<ItemType>::operator+=(const Array<ItemType>& other)
 }
 
 template <typename ItemType>
-std::ostream& operator<<(std::ostream& r, Array<ItemType>& other)
+std::ostream& operator<<(std::ostream& r,const Array<ItemType>& other)
 {
 	for (int i = 0; i < other.size(); i++)
 		r << other[i] << " ";
@@ -417,7 +418,7 @@ std::istream& operator>>(std::istream& r, Array<ItemType>& other)
 }
 
 template <typename ItemType>
-bool Array<ItemType>::operator==(const Array<ItemType>& other)
+bool Array<ItemType>::operator==(const Array<ItemType>& other) const
 {
 	if (m_size != other.m_size)
 		return false;
@@ -428,10 +429,7 @@ bool Array<ItemType>::operator==(const Array<ItemType>& other)
 }
 
 template <typename ItemType>
-bool Array<ItemType>::operator!=(const Array<ItemType>& other)
+bool Array<ItemType>::operator!=(const Array<ItemType>& other) const
 {
-	if (operator==(other))
-		return false;
-	else
-		return true;
+	return !(operator==(other));
 }

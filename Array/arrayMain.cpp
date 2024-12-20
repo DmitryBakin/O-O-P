@@ -5,9 +5,10 @@
 void main()
 {
 	BoolVector bv(12);
-	Array<BoolVector> arr(10);
-	arr.insert(0,0);
-	Array<BoolVector> ar(arr);
-	std::cout << ar;
-	std::cout << "\n" << arr;
+	Array<int> arr(10);
+	//arr.insert(0,0);
+	Array<int> ar(arr);
+	arr.insert(1, 1);
+	std::cout << (ar != arr);
+	//std::cout << "\n" << arr;
 }
